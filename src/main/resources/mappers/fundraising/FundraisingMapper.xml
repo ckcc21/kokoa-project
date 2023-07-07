@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.kokoa.together.mapper.fundraising.FundraisingMapper">
+	<resultMap
+		type="com.kokoa.together.fundraising.dto.FundraisingDTO"
+		id="fundraising">
+		<id property="num" column="Fundraising_Num" />
+		<result property="topicId" column="Topic_Id" />
+		<result property="goal" column="Fundraising_Goal" />
+		<result property="proposer" column="proposer" />
+		<result property="img" column="Fundraising_Img" />
+		<result property="title" column="Fundraising_Title" />
+		<result property="content" column="Fundraising_Content" />
+		<result property="startDate" column="Start_Date" />
+		<result property="endDate" column="End_Date" />
+		<result property="totalDonation" column="Donation_Total" />
+	</resultMap>
+
+	<select id="newFundraisingList" resultMap="fundraising">
+		select * from (select rownum rn, B.* from (select A.* from (select *
+		from Fundraising where <![CDATA[ sysdate <= End_Date ]]>)A
+		where Topic_Id between #{topicId1} and #{topicId2})B) natural join (select fundraising_num, (sum(donation_direct) +
+		sum(donation_cheer) * 100 + sum(donation_share) * 100 +
+		sum(donation_comment) * 100) as Donation_Total from donation group
+		by fundraising_num) where rn between #{start} and #{end} order by Start_Date
+		desc
+	</select>
+
+	<select id="closingFundraisingList" resultMap="fundraising">
+		select * from (select rownum rn, B.* from (select A.* from (select *
+		from Fundraising where <![CDATA[ sysdate <= End_Date ]]>)A
+		where Topic_Id between #{topicId1} and #{topicId2} order by
+		End_Date - sysdate asc)B) natural join (select fundraising_num,
+		(sum(donation_direct) + sum(donation_cheer) * 100 +
+		sum(donation_share) * 100 + sum(donation_comment) * 100) as
+		Donation_Total from donation group by fundraising_num) where rn
+		between #{start} and #{end}
+	</select>
+
+	<insert id="writeSave">
+		insert into Fundraising(Fundraising_Num, Topic_Id,
+		Fundraising_Goal,
+		proposer, Fundraising_Img, Fundraising_Title,
+		Fundraising_Content,
+		End_Date) values((select
+		NVL(MAX(Fundraising_Num)+1,1) from
+		Fundraising), #{topicId}, #{goal},
+		#{proposer}, #{img}, #{title},
+		#{content}, #{endDate})
+	</insert>
+
+	<select id="fundraisingLoad" resultMap="fundraising">
+		select * from Fundraising
+		where Fundraising_Num=#{num}
+	</select>
+</mapper>

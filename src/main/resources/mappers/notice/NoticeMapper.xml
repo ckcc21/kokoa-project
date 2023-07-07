@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kokoa.together.mapper.notice.NoticeMapper">
+	<resultMap type="com.kokoa.together.notice.dto.NoticeDTO"
+		id="notice">
+		<result property="num" column="Notice_Num" />
+		<result property="fix" column="Notice_Fix" />
+		<result property="tit" column="Notice_Tit" />
+		<result property="date" column="Notice_Date" />
+		<result property="title" column="Notice_Title" />
+		<result property="content" column="Notice_Content" />
+	</resultMap>
+
+	<select id="noticeList" resultMap="notice">
+	select B.* from (select rownum
+		rn, A.* from (select * from notice where
+		Notice_Tit between #{tit1} and
+		#{tit2} order by Notice_Fix asc, Notice_Num desc)A)B where rn
+		between #{start}
+		and #{end}
+	</select>
+
+	<insert id="noticeWriteSave">
+		insert into
+		notice(Notice_Num,Notice_Tit,Notice_Title,Notice_Content)
+		values((select NVL(MAX(Notice_Num)+1,1) from
+		notice),#{tit},#{title},#{content})
+	</insert>
+
+	<select id="noticeLoad" resultMap="notice">
+		select * from notice where
+		Notice_Num=#{num}
+	</select>
+
+	<update id="noticeFix">
+		update notice set Notice_Fix=#{fix} where
+		Notice_Num=#{num}
+	</update>
+
+	<delete id="noticeDelete">
+		delete from notice where Notice_Num=#{num}
+	</delete>
+</mapper>

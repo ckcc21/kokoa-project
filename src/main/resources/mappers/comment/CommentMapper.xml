@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.kokoa.together.mapper.comment.CommentMapper">
+	<resultMap type="com.kokoa.together.comment.dto.CommentDTO"
+		id="comments">
+		<id property="commentNum" column="Comment_Num" />
+		<result property="id" column="Id" />
+		<result property="fundraisingNum" column="Fundraising_Num" />
+		<result property="content" column="Comment_Content" />
+		<result property="donationDirect" column="Donation_Direct" />
+		<result property="donationComment" column="Donation_Comment" />
+		<result property="date" column="Comment_Date" />
+		<result property="profileImg" column="Profile_Img" />
+		<result property="totalLike" column="Total_Like" />
+		<result property="liked" column="Liked" />
+	</resultMap>
+
+	<resultMap type="com.kokoa.together.comment.dto.LikeDTO"
+		id="like">
+		<result property="commentNum" column="Comment_Num" />
+		<result property="id" column="Id" />
+		<result property="liked" column="Liked" />
+	</resultMap>
+
+	<select id="commentDonationCheck" resultType="Integer">
+		select count(*)
+		from Comments where Id = #{id} and Fundraising_Num =
+		#{fundraisingNum}
+		and Donation_Comment != 0
+	</select>
+
+	<insert id="commentInsert">
+		insert into Comments(Comment_Num, Id,
+		Fundraising_Num, Comment_Content,
+		Donation_Direct, Donation_Comment)
+		values((select
+		NVL(MAX(Comment_Num)+1,1) from Comments), #{id},
+		#{fundraisingNum},
+		#{content}, #{donationDirect}, #{donationComment})
+	</insert>
+
+	<select id="commentLoad" resultMap="comments">
+		select * from(select rownum
+		rn, E.* from(select D.* from(select A.*,
+		B.Total_Like, C.Liked from
+		(select * from Comments natural join(select
+		id, Profile_Img from
+		Account) where Fundraising_Num =
+		#{fundraisingNum})A left join (select
+		Comment_Num
+		,sum(Liked)Total_Like from Like_Table group by
+		Comment_Num)B on
+		A.Comment_Num = B.Comment_Num left join (select * from
+		Like_Table
+		where id = #{id,jdbcType=VARCHAR})C on A.Comment_Num =
+		C.Comment_Num)D
+		order by Comment_Num desc)E) where rn between #{start}
+		and #{end}
+	</select>
+
+	<select id="commentCount" resultType="Integer">
+		select count(*) from
+		Comments where Fundraising_Num = #{num}
+	</select>
+
+	<select id="restCommentCheck" resultType="Integer">
+		select count(*)
+		from(select rownum, C.* from Comments C where
+		Fundraising_Num =
+		#{fundraisingNum} and rownum between #{start} and
+		#{end})
+	</select>
+
+	<insert id="commentLikeInsert">
+		insert into Like_Table(Comment_Num, Id, Liked)
+		values(#{commentNum}, #{id}, 1)
+	</insert>
+
+	<delete id="commentLikeDelete">
+		delete from Like_Table where Comment_Num =
+		#{commentNum} and Id = #{id}
+	</delete>
+</mapper>

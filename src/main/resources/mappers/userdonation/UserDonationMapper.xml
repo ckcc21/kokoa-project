@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.kokoa.together.mapper.userdonation.UserDonationMapper">
+	<resultMap
+		type="com.kokoa.together.userDonation.DTO.UserDonationDTO"
+		id="userDonation">
+		<result property="num" column="Fundraising_Num" />
+		<result property="id" column="Donation_Id" />
+		<result property="directMoney" column="Donation_Direct" />
+		<result property="likeMoney" column="Donation_Like" />
+		<result property="shareMoney" column="Donation_Share" />
+		<result property="commentMoney" column="Donation_comment" />
+		<result property="date" column="Donation_Date" />
+	</resultMap>
+	
+	
+	
+	
+	<select id="donationList" resultMap="userDonation">
+		select * from User_Donation
+		where UD_Id=#{id}
+	</select>
+
+	<select id="donateCount" resultType="Integer">
+		select count(*) from
+		User_Donation where UD_Id=#{id} and UD_DirectMoney!=0
+	</select>
+
+	<select id="directMoneyList" resultMap="userDonation">
+		select * from
+		User_Donation where UD_Id=#{id} and UD_DirectMoney!=0
+	</select>
+
+	<select id="attendMoneyList" resultMap="userDonation">
+		select * from
+		User_Donation where UD_Id=#{id} and UD_DirectMoney=0
+	</select>
+
+	<insert id="donationInsert">
+		insert into
+		User_Donation(UD_No,UD_Id,UD_title,UD_DirectMoney,UD_LikeMoney,UD_ReplyMoney,UD_ShareMoney)
+		values(user_donation_seq.nextval,#{id},#{title},#{directMoney},#{likeMoney},#{replyMoney},#{shareMoney})
+	</insert>
+
+	<select id="likeMoneyCheck" resultMap="userDonation">
+		select * from User_Donation where UD_Id=#{id} and UD_Title=#{title} and UD_LikeMoney=1
+	</select>
+
+	<insert id="likeInsert">
+		insert into
+		User_Donation(UD_No,UD_Id,UD_title,UD_LikeMoney)
+		values(user_donation_seq.nextval,#{id},#{title},1)
+	</insert>
+
+	<delete id="likeCancel">
+		delete from User_Donation where UD_Id=#{id} and
+		UD_Title=#{title} and UD_likeMoney = 1
+	</delete>
+</mapper>

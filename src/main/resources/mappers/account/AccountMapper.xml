@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.kokoa.together.mapper.account.AccountMapper">
+	<resultMap type="com.kokoa.together.account.dto.AccountDTO"
+		id="account">
+		<id column="id" property="id" />
+		<result column="password" property="password" />
+		<result column="name" property="name" />
+		<result column="nickname" property="nickName" />
+		<result column="e_mail" property="eMail" />
+		<result column="profile_img" property="profileImg" />
+		<result column="postal_code" property="postalCode" />
+		<result column="road_name_addr" property="roadNameAddr" />
+		<result column="detailed_addr" property="detailedAddr" />
+		<result column="gender" property="gender" />
+		<result column="tel" property="tel" />
+		<result column="birth" property="birth" />
+	</resultMap>
+
+	<insert id="register">
+		insert into account
+		(id,password,name,e_mail,postal_code,road_name_addr,detailed_addr,gender,tel,birth)
+		values
+		(#{id},#{password},#{name},#{eMail},#{postalCode},#{roadNameAddr},#{detailedAddr},#{gender},#{tel},#{birth})
+	</insert>
+
+	<insert id="kakaoRegister">
+		insert into account(id,nickname,e_mail)
+		values(#{id},#{nickName},#{eMail})
+	</insert>
+
+	<select id="idCheck" resultType="int" parameterType="String">
+		select
+		count(id) from account where id= #{id}
+	</select>
+
+	<select id="logChk" resultMap="account">
+		select * from account where
+		id=#{id}
+	</select>
+
+	<update id="keepLogin">
+		update account set
+		session_id=#{sessionId},limit_time=#{limitDate} where
+		id=#{id}
+	</update>
+
+</mapper>

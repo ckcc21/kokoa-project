@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+   xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+   
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+   <!-- 히카리 커넥션풀 빈 등록 -->
+   <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+      <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+      <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe" />
+      <property name="username" value="kokoa" />
+      <property name="password" value="1234" />
+   </bean>   
+   <!-- 히카리 데이터소스 빈 등록 -->   
+   <bean id="ds" class="com.zaxxer.hikari.HikariDataSource">
+      <constructor-arg ref="hikariConfig"/>
+   </bean>
+   
+   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" ref="ds"/> <!--classpath: = resources임   그래서 아래 해석은  resources/에 mappers/에 (**)모든 것인데/ *대문자 Mapper로 끝나는 모든파일에 데이터베이스 연결하겠다  -->
+      <property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml"/>
+   </bean>									<!-- 경로 반드시 체크할것!!!!!!!!!! -->
+   <!-- 마이바티스 xml파일과 dao빈(mapper.java) 연결  -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+    
+    
+    <mybatis-spring:scan base-package="com.kokoa.together.mapper"/> 
+						 	  	
+	
+</beans>

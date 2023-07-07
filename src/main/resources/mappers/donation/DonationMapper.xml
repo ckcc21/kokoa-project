@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.kokoa.together.mapper.donation.DonationMapper">
+	<resultMap type="com.kokoa.together.donation.dto.DonationDTO"
+		id="donation">
+		<result property="id" column="Id" />
+		<result property="num" column="Fundraising_Num" />
+		<result property="donationDirect" column="Donation_Direct" />
+		<result property="donationCheer" column="Donation_Cheer" />
+		<result property="donationShare" column="Donation_Share" />
+		<result property="donationComment" column="Donation_Comment" />
+		<result property="date" column="Donation_Date" />
+		<result property="sumDirect" column="Sum_Direct" />
+		<result property="sumDirectCount" column="Sum_Direct_Count" />
+		<result property="sumCheer" column="Sum_Cheer" />
+		<result property="sumCheerCount" column="Sum_Cheer_Count" />
+		<result property="sumShare" column="Sum_Share" />
+		<result property="sumShareCount" column="Sum_Share_Count" />
+		<result property="sumComment" column="Sum_Comment" />
+		<result property="sumCommentCount" column="Sum_Comment_Count" />
+		<result property="donationParticipate"
+			column="Donation_Participate" />
+		<result property="donationParticipateCount"
+			column="Donation_Participate_Count" />
+		<result property="donationTotal" column="Donation_Total" />
+		<result property="donationTotalCount"
+			column="Donation_Total_Count" />
+		<result property="goal" column="Fundraising_Goal" />
+		<result property="commentCount" column="Comment_Count"/>
+	</resultMap>
+	
+	<insert id="fundraisingCreate">
+		insert into Donation(Id, Fundraising_Num)
+		values(#{id},(select
+		NVL(MAX(Fundraising_Num)+1,1) from Donation))
+	</insert>
+
+	<select id="fundraisingDonation" resultMap="donation">
+		select C.*,
+		(Sum_Direct + Donation_Participate)Donation_Total,
+		F.Fundraising_Goal
+		from (select B.*, (Sum_Cheer + Sum_Share +
+		Sum_Comment)Donation_Participate, (Sum_Direct_Count +
+		Donation_Participate_Count)Donation_Total_Count from (select A.*,
+		(Sum_Cheer_Count + Sum_Share_Count +
+		Sum_Comment_Count)Donation_Participate_Count, (Sum_Cheer_Count *
+		100)Sum_Cheer, (Sum_Share_Count * 100)Sum_Share, (Sum_Comment_Count *
+		100)Sum_Comment from (select Fundraising_Num,
+		sum(Donation_Direct)Sum_Direct, (select count(*) from (select * from donation where fundraising_num=#{num}) where
+		Donation_Direct != 0)Sum_Direct_Count,
+		sum(Donation_Cheer)Sum_Cheer_Count,
+		sum(Donation_Share)Sum_Share_Count,
+		sum(Donation_Comment)Sum_Comment_Count from Donation group by
+		Fundraising_Num having Fundraising_Num=#{num})A)B)C inner join
+		Fundraising F on C.Fundraising_Num = F.Fundraising_Num
+	</select>
+
+	<insert id="donationInsert">
+		insert into Donation(Id, Fundraising_Num,
+		Donation_Direct, Donation_Cheer, Donation_Share, Donation_Comment)
+		values(#{id}, #{num}, #{donationDirect}, #{donationCheer},
+		#{donationShare}, #{donationComment})
+	</insert>
+</mapper>

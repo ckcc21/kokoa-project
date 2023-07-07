@@ -1,0 +1,191 @@
+@charset "EUC-KR";
+
+.cont_join .group_official {
+	padding-bottom: 100px;
+}
+
+.group_official {
+	width: 700px;
+	margin: 0 auto;
+	padding-top: 40px;
+}
+
+.group_official .list_more {
+	padding-top: 19px;
+	text-align: center;
+}
+
+.img_loading {
+	width: 35px;
+	height: 16px;
+}
+
+.list_official li {
+	padding: 29px 0 35px 0;
+	border-bottom: 1px solid #eaeaea;
+	text-align: left;
+}
+
+.list_official li a b {
+	padding-top: 0;
+}
+
+.icon_pin {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-right: 9px;
+	background: url(//t1.kakaocdn.net/together_image/common/ico_pin.svg)
+		no-repeat 50%;
+	vertical-align: middle;
+}
+
+.write_head {
+	display: table;
+	width: 700px;
+	margin: 0 auto;
+	padding: 31px 0 25px;
+	text-align: center;
+}
+
+.subject_official {
+	padding-top: 0;
+	display: block;
+	overflow: hidden;
+	line-height: 31px;
+	width: 100%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-wrap: normal;
+	font-weight: 400;
+	font-family: sans-serif;
+	font-size: 20px;
+}
+
+.tit_official {
+	padding-right: 7px;
+	display: inline-block;
+	vertical-align: top;
+	padding-top: 6px;
+	color: #666;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.date_official {
+	padding-top: 6px;
+	display: inline-block;
+	vertical-align: top;
+	color: #666;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.view_head {
+	display: table;
+	width: 700px;
+	margin: 0 auto;
+	padding: 31px 0 25px;
+}
+
+.view_head .tit_official {
+	padding-top: 11px;
+	display: block;
+	color: #666;
+	font-size: 14px;
+	line-height: 20px;
+	font-size: 14px;
+}
+
+.view_head .subject_official {
+	padding-top: 7px;
+	display: block;
+	font-weight: 400;
+	font-family: sans-serif;
+	font-size: 20px;
+	line-height: 31px;
+}
+
+.view_head .date_official {
+	padding-top: 3px;
+	display: inline-block;
+	font-size: 14px;
+	line-height: 20px;
+	vertical-align: top;
+	line-height: 20px;
+}
+
+.view_body {
+	padding-top: 44px;
+	overflow: hidden;
+	width: 700px;
+	margin: 0 auto;
+	border-top: 1px solid #e5e5e5;
+}
+
+.view_foot {
+	width: 700px;
+	margin: 52px auto 10px;
+}
+
+.view_foot .writer {
+	position: relative;
+	display: block;
+	padding-top: 27px;
+	font-weight: 400;
+	line-height: 25px;
+}
+
+.wrap_plusfriend {
+	padding: 60px 0 23px 0;
+}
+
+.wrap_plusfriend .info_plusfriend {
+	font-size: 13px;
+	line-height: 20px;
+	display: inline-block;
+	padding-top: 1px;
+	color: #999;
+	text-align: left;
+	white-space: pre-line;
+	vertical-align: top;
+}
+
+.wrap_plusfriend .btn_plusfriend {
+	margin-top: -3px;
+	margin-left: 15px;
+	display: inline-block;
+	width: 113px;
+	height: 45px;
+	border-radius: 6px;
+	background-color: #ffe500;
+	vertical-align: top;
+}
+
+.wrap_plusfriend .btn_plusfriend .icon_plusfriend {
+	display: inline-block;
+	width: 26px;
+	height: 18px;
+	margin-top: 2px;
+	margin-right: 4px;
+	background-position: -160px -220px;
+	vertical-align: top;
+}
+
+.icon_together {
+	overflow: hidden;
+	font-size: 0;
+	line-height: 0;
+	text-indent: -9999px;
+	background:
+		url(//t1.kakaocdn.net/together_image/common/ico_together3_200615v2.png)
+		no-repeat 0 0;
+}
+
+.wrap_plusfriend .btn_plusfriend .txt_plusfriend {
+	display: inline-block;
+	font-size: 15px;
+	font-family: sans-serif;
+	vertical-align: top;
+	line-height: 1.2;
+}
